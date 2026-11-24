@@ -1,0 +1,132 @@
+/* Find items page */
+
+.find-page {
+  height: calc(100vh - 116px);
+  min-height: 480px;
+  display: grid;
+  grid-template-columns: minmax(300px, 390px) minmax(0, 1fr);
+  gap: 16px;
+}
+
+.find-list-panel {
+  min-height: 0;
+  background: #171d25;
+  border: 1px solid #2d3540;
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Search and filter controls */
+.find-tools {
+  display: flex;
+  gap: 8px;
+}
+
+.find-tools label {
+  height: 42px;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 12px;
+  background: #202630;
+  border: 1px solid #303945;
+  border-radius: 11px;
+  color: #8993a0;
+}
+
+.find-tools input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 11px;
+}
+
+.filter-icon {
+  width: 42px;
+  border-radius: 10px;
+  background: #202630;
+  border: 1px solid #303945;
+  color: #b9c0ca;
+}
+
+.filter-row {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.filter-row select {
+  min-width: 0;
+  flex: 1;
+  background: #202630;
+  border: 1px solid #303945;
+  color: #bfc5ce;
+  border-radius: 9px;
+  padding: 9px;
+  font-size: 11px;
+}
+
+/* List information */
+.list-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 2px 12px;
+}
+
+.list-heading h2 {
+  font-size: 14px;
+}
+
+.list-heading span {
+  font-size: 10px;
+  color: #8993a0;
+}
+
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+/* Map view */
+.find-map {
+  min-width: 0;
+  min-height: 0;
+}
+
+.find-map .map-frame,
+.find-map .leaflet-map {
+  height: 100%;
+}
+
+.empty-state {
+  padding: 25px;
+  text-align: center;
+  color: #8993a0;
+  font-size: 12px;
+}
+
+@media (max-width: 850px) {
+  .find-page {
+    height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .find-list-panel {
+    max-height: 480px;
+  }
+
+  .find-map {
+    height: 55vh;
+  }
+}

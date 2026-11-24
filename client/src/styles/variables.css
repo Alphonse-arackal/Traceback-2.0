@@ -1,0 +1,12 @@
+:root {
+  font-family: Inter, Arial, sans-serif;
+  color-scheme: dark;
+
+  --bg: #101419;
+  --panel: #171d25;
+  --card: #1c222b;
+  --line: #2d3540;
+  --orange: #ff941f;
+  --text: #e7e9ed;
+  --muted: #929ba7;
+}

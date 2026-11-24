@@ -1,0 +1,57 @@
+/* Map surface */
+.map-frame { position: relative; width: 100%; height: 100%; min-height: 280px; overflow: hidden; border: 1px solid #303843; border-radius: 14px; background: #202832; }
+.leaflet-map { width: 100%; height: 100%; min-height: 280px; background: #202832; }
+.leaflet-container { font-family: Inter, Arial, sans-serif; }
+
+/* Lost and found markers */
+.tb-map-icon { background: transparent; border: 0; }
+.map-pin { display: grid; place-items: center; width: 32px; height: 38px; border: 2px solid rgba(255,255,255,.9); border-radius: 50% 50% 50% 4px; transform: rotate(-45deg); box-shadow: 0 4px 12px #0008; color: #fff; font-weight: 800; }
+.pin-lost { background: #ef476f; }
+.pin-found { background: #20a66a; }
+.pin-selected { background: var(--orange); }
+
+/* Leaflet controls and popups */
+.leaflet-popup-content-wrapper, .leaflet-popup-tip { background: #202630; color: #e7e9ed; }
+.leaflet-control-zoom a { background: #202630 !important; color: #fff !important; border-color: #3a424d !important; }
+
+/* Search overlay */
+.location-search { position: absolute; top: 15px; left: 60px; z-index: 1000; width: min(420px, calc(100% - 85px)); }
+.location-search-form { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border: 1px solid #394351; border-radius: 12px; background: #202630; box-shadow: 0 4px 14px rgba(0,0,0,.25); transition: border-color .2s ease; }
+.location-search-form:focus-within { border-color: var(--orange); }
+.search-icon { flex-shrink: 0; color: #929ba8; }
+.location-search-form input { flex: 1; min-width: 0; padding: 3px 0; border: none !important; outline: none !important; background: transparent !important; color: #f1f3f5 !important; font-size: 14px; box-shadow: none !important; }
+.location-search-form input::placeholder { color: #929ba8; }
+.search-submit-button { flex-shrink: 0; padding: 9px 15px; border: 0; border-radius: 8px; background: var(--orange); color: #15191f; font-size: 13px; font-weight: 600; cursor: pointer; }
+.search-submit-button:hover { background: #ffad42; }
+.search-submit-button:disabled { opacity: .6; cursor: wait; }
+.search-clear-button { display: flex; align-items: center; justify-content: center; padding: 5px; border: 0; border-radius: 6px; background: transparent; color: #929ba8; cursor: pointer; }
+.search-clear-button:hover { background: #303946; color: #fff; }
+.location-search-results { margin-top: 8px; overflow: hidden; border: 1px solid #394351; border-radius: 10px; background: #202630; box-shadow: 0 8px 24px rgba(0,0,0,.35); max-height: min(45vh, 320px); overflow-y: auto; }
+.location-search-result { display: flex; align-items: flex-start; gap: 11px; width: 100%; padding: 13px; border: 0; border-bottom: 1px solid #303946; background: transparent; color: #e7e9ed; text-align: left; font-size: 13px; line-height: 1.5; cursor: pointer; }
+.location-search-result:last-child { border-bottom: 0; }
+.location-search-result:hover { background: #303946; }
+.location-search-result svg { flex-shrink: 0; margin-top: 2px; color: var(--orange); }
+.search-message { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 10px 13px; border: 1px solid #394351; border-radius: 9px; background: #202630; color: #ff8b9e; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+.search-success { border-color: rgba(54,199,139,.25); color: #36c78b; }
+
+/* Current location control */
+.locate-me-button { position: absolute; right: 20px; bottom: 20px; z-index: 1000; display: flex; align-items: center; gap: 9px; padding: 11px 16px; border: 1px solid #414b59; border-radius: 10px; background: #202630; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 3px 12px #0005; }
+.locate-me-button:hover { background: #303b49; }
+.locate-me-button:disabled { opacity: .7; cursor: wait; }
+.location-error { position: absolute; right: 20px; bottom: 70px; z-index: 1000; max-width: 240px; padding: 10px 14px; border-radius: 8px; background: #39252a; color: #ff8b9e; font-size: 12px; }
+
+@media (max-width: 700px) {
+  .location-search { top: 10px; left: 10px; width: calc(100% - 20px); }
+  .location-search-form { gap: 8px; padding: 8px 10px; border-radius: 11px; }
+  .location-search-form input { font-size: 13px; }
+  .search-submit-button { padding: 9px 11px; font-size: 12px; }
+  .leaflet-top.leaflet-left { top: 64px; }
+  .locate-me-button { right: 10px; bottom: 10px; min-height: 42px; padding: 10px 12px; border-radius: 11px; }
+  .location-error { right: 10px; bottom: 60px; max-width: min(260px, calc(100% - 20px)); }
+  .leaflet-popup-content { margin: 10px 12px; }
+}
+
+@media (max-width: 360px) {
+  .search-submit-button { padding: 8px 9px; }
+  .search-icon { width: 17px; }
+}

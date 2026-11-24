@@ -1,0 +1,162 @@
+.topbar {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  gap: 30px;
+  background: #151a21;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; width: 355px; flex-shrink: 0; }
+.brand-pin { width: 40px; height: 40px; border-radius: 13px; background: var(--orange); display: grid; place-items: center; color: #111820; }
+.brand-copy { display: flex; flex-direction: column; gap: 3px; }
+.brand-copy strong { font-size: 21px; letter-spacing: -0.4px; }
+.brand-copy small { font-size: 10px; letter-spacing: 3px; color: var(--muted); }
+.global-search { height: 44px; max-width: 510px; flex: 1; display: flex; align-items: center; gap: 12px; padding: 0 16px; border: 1px solid #303741; background: #1c222b; border-radius: 30px; color: #8f98a5; }
+.global-search input { border: 0; outline: 0; background: transparent; color: var(--text); width: 100%; font-size: 13px; }
+.global-search input::placeholder { color: #828b98; }
+.top-actions { margin-left: auto; display: flex; align-items: center; gap: 25px; }
+.icon-button { border: 0; background: transparent; color: #c3c8d0; position: relative; padding: 7px; }
+.notification i { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); right: 5px; top: 5px; }
+.user-chip { display: flex; align-items: center; gap: 11px; background: transparent; border: 0; color: var(--text); text-align: left; }
+.user-avatar { width: 40px; height: 40px; border-radius: 50%; background: #252c36; border: 1px solid #3b424d; display: grid; place-items: center; color: var(--orange); font-weight: 700; }
+.user-chip b, .user-chip small { display: block; }
+.user-chip b { font-size: 13px; }
+.user-chip small { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+@media (max-width: 850px) {
+  .topbar { gap: 12px; padding: 0 16px; }
+  .brand { width: auto; }
+  .brand-copy small, .user-details { display: none; }
+  .global-search { margin-left: auto; }
+  .top-actions { gap: 8px; }
+}
+
+@media (max-width: 700px) {
+  .topbar { height: 62px; padding: 0 14px; gap: 10px; }
+  .brand { gap: 9px; }
+  .brand-pin { width: 36px; height: 36px; border-radius: 11px; }
+  .brand-copy { display: flex; }
+  .brand-copy strong { font-size: 17px; }
+  .global-search { display: none; }
+  .top-actions { margin-left: auto; }
+  .icon-button { padding: 8px; }
+  .user-avatar { width: 36px; height: 36px; }
+}
+
+
+/* HEADER ACTIONS */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* LOGOUT BUTTON */
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 13px;
+  background: transparent;
+  border: 1px solid #394451;
+  border-radius: 8px;
+  color: #ef7777;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background: rgba(239, 119, 119, 0.1);
+  border-color: #ef7777;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .header-actions {
+    gap: 7px;
+  }
+
+  .logout-button {
+    padding: 9px;
+  }
+
+  .logout-button span {
+    display: none;
+  }
+}
+
+/* ============================================
+   HEADER ACTIONS
+============================================ */
+
+.header-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+/* PROFILE */
+.header-actions .user-chip {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+}
+
+/* LOGOUT BUTTON */
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 13px;
+  background: transparent;
+  border: 1px solid #394451;
+  border-radius: 8px;
+  color: #ef7777;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background: rgba(239, 119, 119, 0.1);
+  border-color: #ef7777;
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+
+@media (max-width: 850px) {
+  .header-actions {
+    margin-left: auto;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 700px) {
+  .header-actions {
+    margin-left: auto;
+    gap: 7px;
+  }
+
+  .logout-button {
+    padding: 9px;
+  }
+
+  .logout-button span {
+    display: none;
+  }
+}
