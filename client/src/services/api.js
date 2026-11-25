@@ -1,31 +1,36 @@
+// ============================================
+// API BASE URL
+// Local development and production
+// ============================================
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
 // ============================================
 // GET ALL ITEMS
 // Public - fetch everyone's reports
 // ============================================
 export const getItems = async (filters = {}) => {
-  const queryParams = new URLSearchParams();
+  const queryParams = new URLSearchParams()
 
   Object.entries(filters).forEach(([key, value]) => {
     if (value) {
-      queryParams.append(key, value);
+      queryParams.append(key, value)
     }
-  });
+  })
 
-  const url = `${API_BASE_URL}/items?${queryParams.toString()}`;
+  const url = `${API_BASE_URL}/items?${queryParams.toString()}`
 
-  const response = await fetch(url);
+  const response = await fetch(url)
 
   if (!response.ok) {
-    throw new Error("Failed to fetch items");
+    throw new Error('Failed to fetch items')
   }
 
-  const data = await response.json();
+  const data = await response.json()
 
-  return data.items;
-};
+  return data.items
+}
 
 // ============================================
 // GET MY REPORTS
@@ -36,31 +41,31 @@ export const getMyReports = async (token) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
+  })
 
-  const data = await response.json();
+  const data = await response.json()
 
   if (!response.ok) {
-    throw new Error(data.message || "Failed to fetch your reports");
+    throw new Error(data.message || 'Failed to fetch your reports')
   }
 
-  return data.items;
-};
+  return data.items
+}
 
 // ============================================
 // GET SINGLE ITEM
 // ============================================
 export const getItemById = async (id) => {
-  const response = await fetch(`${API_BASE_URL}/items/${id}`);
+  const response = await fetch(`${API_BASE_URL}/items/${id}`)
 
   if (!response.ok) {
-    throw new Error("Failed to fetch item");
+    throw new Error('Failed to fetch item')
   }
 
-  const data = await response.json();
+  const data = await response.json()
 
-  return data.item;
-};
+  return data.item
+}
 
 // ============================================
 // CREATE ITEM
@@ -68,21 +73,21 @@ export const getItemById = async (id) => {
 // ============================================
 export const createItem = async (itemData, token) => {
   const response = await fetch(`${API_BASE_URL}/items`, {
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
     },
     body: itemData,
-  });
+  })
 
-  const data = await response.json();
+  const data = await response.json()
 
   if (!response.ok) {
-    throw new Error(data.message || "Failed to create item");
+    throw new Error(data.message || 'Failed to create item')
   }
 
-  return data.item;
-};
+  return data.item
+}
 
 // ============================================
 // UPDATE ITEM
@@ -90,21 +95,21 @@ export const createItem = async (itemData, token) => {
 // ============================================
 export const updateItem = async (id, itemData, token) => {
   const response = await fetch(`${API_BASE_URL}/items/${id}`, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
     },
     body: itemData,
-  });
+  })
 
-  const data = await response.json();
+  const data = await response.json()
 
   if (!response.ok) {
-    throw new Error(data.message || "Failed to update item");
+    throw new Error(data.message || 'Failed to update item')
   }
 
-  return data.item;
-};
+  return data.item
+}
 
 // ============================================
 // DELETE ITEM
@@ -112,41 +117,41 @@ export const updateItem = async (id, itemData, token) => {
 // ============================================
 export const deleteItem = async (id, token) => {
   const response = await fetch(`${API_BASE_URL}/items/${id}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
+  })
 
-  const data = await response.json();
+  const data = await response.json()
 
   if (!response.ok) {
-    throw new Error(data.message || "Failed to delete item");
+    throw new Error(data.message || 'Failed to delete item')
   }
 
-  return data;
-};
+  return data
+}
 
 // ============================================
 // GOOGLE LOGIN
 // ============================================
 export const googleLogin = async (credential) => {
   const response = await fetch(`${API_BASE_URL}/auth/google`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ credential }),
-  });
+  })
 
-  const data = await response.json();
+  const data = await response.json()
 
   if (!response.ok) {
-    throw new Error(data.message || "Google login failed");
+    throw new Error(data.message || 'Google login failed')
   }
 
-  return data;
-};
+  return data
+}
 
 // ============================================
 // GET USER PROFILE
@@ -156,35 +161,35 @@ export const getUserProfile = async (token) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
+  })
 
-  const data = await response.json();
+  const data = await response.json()
 
   if (!response.ok) {
-    throw new Error(data.message || "Failed to fetch profile");
+    throw new Error(data.message || 'Failed to fetch profile')
   }
 
-  return data.user;
-};
+  return data.user
+}
 
 // ============================================
 // UPDATE USER PROFILE
 // ============================================
 export const updateUserProfile = async (token, profileData) => {
   const response = await fetch(`${API_BASE_URL}/users/profile`, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(profileData),
-  });
+  })
 
-  const data = await response.json();
+  const data = await response.json()
 
   if (!response.ok) {
-    throw new Error(data.message || "Failed to update profile");
+    throw new Error(data.message || 'Failed to update profile')
   }
 
-  return data.user;
-};
+  return data.user
+}
