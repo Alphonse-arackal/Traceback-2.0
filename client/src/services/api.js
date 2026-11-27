@@ -1,15 +1,44 @@
 
-const API_BASE_URL = "http://localhost:5000/api";
+// ============================================
+// API CONFIGURATION
+// ============================================
+
+// Local development fallback:
+// http://localhost:5000/api
+//
+// Production:
+// Uses VITE_API_URL configured in Vercel.
+
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+).replace(/\/+$/, "");
+
+// ============================================
+// RESPONSE HANDLER
+// ============================================
+
+const handleResponse = async (response, defaultMessage) => {
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(
+      data.message || data.error || defaultMessage
+    );
+  }
+
+  return data;
+};
 
 // ============================================
 // GET ALL ITEMS
 // Public - fetch everyone's reports
 // ============================================
+
 export const getItems = async (filters = {}) => {
   const queryParams = new URLSearchParams();
 
   Object.entries(filters).forEach(([key, value]) => {
-    if (value) {
+    if (value !== undefined && value !== null && value !== "") {
       queryParams.append(key, value);
     }
   });
@@ -18,11 +47,10 @@ export const getItems = async (filters = {}) => {
 
   const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch items");
-  }
-
-  const data = await response.json();
+  const data = await handleResponse(
+    response,
+    "Failed to fetch items"
+  );
 
   return data.items;
 };
@@ -31,6 +59,7 @@ export const getItems = async (filters = {}) => {
 // GET MY REPORTS
 // Fetch only the logged-in user's reports
 // ============================================
+
 export const getMyReports = async (token) => {
   const response = await fetch(`${API_BASE_URL}/items/my-reports`, {
     headers: {
@@ -38,11 +67,10 @@ export const getMyReports = async (token) => {
     },
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to fetch your reports");
-  }
+  const data = await handleResponse(
+    response,
+    "Failed to fetch your reports"
+  );
 
   return data.items;
 };
@@ -50,14 +78,14 @@ export const getMyReports = async (token) => {
 // ============================================
 // GET SINGLE ITEM
 // ============================================
+
 export const getItemById = async (id) => {
   const response = await fetch(`${API_BASE_URL}/items/${id}`);
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch item");
-  }
-
-  const data = await response.json();
+  const data = await handleResponse(
+    response,
+    "Failed to fetch item"
+  );
 
   return data.item;
 };
@@ -66,6 +94,7 @@ export const getItemById = async (id) => {
 // CREATE ITEM
 // Authentication required
 // ============================================
+
 export const createItem = async (itemData, token) => {
   const response = await fetch(`${API_BASE_URL}/items`, {
     method: "POST",
@@ -75,11 +104,10 @@ export const createItem = async (itemData, token) => {
     body: itemData,
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to create item");
-  }
+  const data = await handleResponse(
+    response,
+    "Failed to create item"
+  );
 
   return data.item;
 };
@@ -88,6 +116,7 @@ export const createItem = async (itemData, token) => {
 // UPDATE ITEM
 // Authentication required
 // ============================================
+
 export const updateItem = async (id, itemData, token) => {
   const response = await fetch(`${API_BASE_URL}/items/${id}`, {
     method: "PUT",
@@ -97,11 +126,10 @@ export const updateItem = async (id, itemData, token) => {
     body: itemData,
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to update item");
-  }
+  const data = await handleResponse(
+    response,
+    "Failed to update item"
+  );
 
   return data.item;
 };
@@ -110,6 +138,7 @@ export const updateItem = async (id, itemData, token) => {
 // DELETE ITEM
 // Authentication required
 // ============================================
+
 export const deleteItem = async (id, token) => {
   const response = await fetch(`${API_BASE_URL}/items/${id}`, {
     method: "DELETE",
@@ -118,18 +147,16 @@ export const deleteItem = async (id, token) => {
     },
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to delete item");
-  }
-
-  return data;
+  return handleResponse(
+    response,
+    "Failed to delete item"
+  );
 };
 
 // ============================================
 // GOOGLE LOGIN
 // ============================================
+
 export const googleLogin = async (credential) => {
   const response = await fetch(`${API_BASE_URL}/auth/google`, {
     method: "POST",
@@ -139,18 +166,16 @@ export const googleLogin = async (credential) => {
     body: JSON.stringify({ credential }),
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Google login failed");
-  }
-
-  return data;
+  return handleResponse(
+    response,
+    "Google login failed"
+  );
 };
 
 // ============================================
 // GET USER PROFILE
 // ============================================
+
 export const getUserProfile = async (token) => {
   const response = await fetch(`${API_BASE_URL}/users/profile`, {
     headers: {
@@ -158,11 +183,10 @@ export const getUserProfile = async (token) => {
     },
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to fetch profile");
-  }
+  const data = await handleResponse(
+    response,
+    "Failed to fetch profile"
+  );
 
   return data.user;
 };
@@ -170,6 +194,7 @@ export const getUserProfile = async (token) => {
 // ============================================
 // UPDATE USER PROFILE
 // ============================================
+
 export const updateUserProfile = async (token, profileData) => {
   const response = await fetch(`${API_BASE_URL}/users/profile`, {
     method: "PUT",
@@ -180,15 +205,13 @@ export const updateUserProfile = async (token, profileData) => {
     body: JSON.stringify(profileData),
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to update profile");
-  }
+  const data = await handleResponse(
+    response,
+    "Failed to update profile"
+  );
 
   return data.user;
 };
-
 
 // ============================================
 // ADMIN API
@@ -196,57 +219,105 @@ export const updateUserProfile = async (token, profileData) => {
 // ============================================
 
 const adminRequest = async (path, token, options = {}) => {
-  if (!token) throw new Error('Your session has expired. Please sign in again.')
+  if (!token) {
+    throw new Error(
+      "Your session has expired. Please sign in again."
+    );
+  }
 
   const response = await fetch(`${API_BASE_URL}/admin${path}`, {
     ...options,
     headers: {
       ...(options.headers || {}),
       Authorization: `Bearer ${token}`,
-      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+      ...(options.body
+        ? { "Content-Type": "application/json" }
+        : {}),
     },
-  })
+  });
 
-  const data = await response.json().catch(() => ({}))
+  return handleResponse(
+    response,
+    `Admin request failed (${response.status})`
+  );
+};
 
-  if (!response.ok) {
-    throw new Error(data.message || data.error || `Admin request failed (${response.status})`)
-  }
-
-  return data
-}
+// ============================================
+// ADMIN DASHBOARD
+// ============================================
 
 export const getAdminDashboard = (token) =>
-  adminRequest('/dashboard', token)
+  adminRequest("/dashboard", token);
+
+// ============================================
+// ADMIN USERS
+// ============================================
 
 export const getAdminUsers = (token, filters = {}) => {
-  const params = new URLSearchParams()
+  const params = new URLSearchParams();
+
   Object.entries(filters).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== '') {
-      params.set(key, String(value))
+    if (value !== undefined && value !== null && value !== "") {
+      params.set(key, String(value));
     }
-  })
-  return adminRequest(`/users?${params.toString()}`, token)
-}
+  });
+
+  return adminRequest(
+    `/users?${params.toString()}`,
+    token
+  );
+};
+
+// Suspend user
 
 export const suspendAdminUser = (token, userId) =>
-  adminRequest(`/users/${encodeURIComponent(userId)}/suspend`, token, { method: 'PATCH' })
+  adminRequest(
+    `/users/${encodeURIComponent(userId)}/suspend`,
+    token,
+    { method: "PATCH" }
+  );
+
+// Reactivate user
 
 export const reactivateAdminUser = (token, userId) =>
-  adminRequest(`/users/${encodeURIComponent(userId)}/reactivate`, token, { method: 'PATCH' })
+  adminRequest(
+    `/users/${encodeURIComponent(userId)}/reactivate`,
+    token,
+    { method: "PATCH" }
+  );
+
+// ============================================
+// ADMIN REPORTS
+// ============================================
 
 export const getAdminReports = (token, filters = {}) => {
-  const params = new URLSearchParams()
+  const params = new URLSearchParams();
+
   Object.entries(filters).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== '') {
-      params.set(key, String(value))
+    if (value !== undefined && value !== null && value !== "") {
+      params.set(key, String(value));
     }
-  })
-  return adminRequest(`/reports?${params.toString()}`, token)
-}
+  });
+
+  return adminRequest(
+    `/reports?${params.toString()}`,
+    token
+  );
+};
+
+// Get individual report
 
 export const getAdminReportById = (token, reportId) =>
-  adminRequest(`/reports/${encodeURIComponent(reportId)}`, token)
+  adminRequest(
+    `/reports/${encodeURIComponent(reportId)}`,
+    token
+  );
+
+// Delete report
 
 export const deleteAdminReport = (token, reportId) =>
-  adminRequest(`/reports/${encodeURIComponent(reportId)}`, token, { method: 'DELETE' })
+  adminRequest(
+    `/reports/${encodeURIComponent(reportId)}`,
+    token,
+    { method: "DELETE" }
+  );
