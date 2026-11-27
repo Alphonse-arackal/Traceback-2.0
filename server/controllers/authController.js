@@ -25,6 +25,7 @@ export const googleLogin = async (req, res) => {
 
     if (!credential) {
       return res.status(400).json({
+        success: false,
         message: "Google credential is required",
       });
     }
@@ -39,6 +40,7 @@ export const googleLogin = async (req, res) => {
 
     if (!payload || !payload.email || !payload.sub) {
       return res.status(401).json({
+        success: false,
         message: "Invalid Google account",
       });
     }
@@ -46,6 +48,7 @@ export const googleLogin = async (req, res) => {
     // Only accept verified Google email addresses
     if (payload.email_verified !== true) {
       return res.status(401).json({
+        success: false,
         message: "Google email is not verified",
       });
     }
@@ -64,6 +67,7 @@ export const googleLogin = async (req, res) => {
         // Prevent linking a different Google account
         if (user.googleId && user.googleId !== googleId) {
           return res.status(409).json({
+            success: false,
             message: "This email is linked to another Google account",
           });
         }
@@ -83,20 +87,40 @@ export const googleLogin = async (req, res) => {
           googleId,
           authProvider: "google",
           isEmailVerified: true,
+          role: "user",
+          accountStatus: "active",
         });
       }
     }
 
-    // Generate TraceBack JWT
+    // ============================================
+    // CHECK ACCOUNT STATUS
+    // ============================================
+
+    if (user.accountStatus === "suspended") {
+      return res.status(403).json({
+        success: false,
+        message: "Your account has been suspended. Please contact support.",
+      });
+    }
+
+    // ============================================
+    // GENERATE TRACEBACK JWT
+    // ============================================
+
     const token = generateToken(user._id);
 
     return res.status(200).json({
+      success: true,
       message: "Google login successful",
       token,
+
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role || "user",
+        accountStatus: user.accountStatus || "active",
       },
     });
 
@@ -104,6 +128,7 @@ export const googleLogin = async (req, res) => {
     console.error("Google login error:", error);
 
     return res.status(401).json({
+      success: false,
       message: "Google authentication failed",
     });
   }

@@ -33,6 +33,20 @@ const userSchema = new mongoose.Schema(
       default: true,
     },
 
+    // User role
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+
+    // Account status
+    accountStatus: {
+      type: String,
+      enum: ["active", "suspended"],
+      default: "active",
+    },
+
     // Editable profile information
     profilePicture: {
       type: String,

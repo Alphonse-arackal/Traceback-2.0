@@ -1,7 +1,20 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
 
+// ============================================
+// LAYOUTS
+// ============================================
+
 import MainLayout from './components/layout/MainLayout'
+import AdminLayout from './components/admin/AdminLayout'
+import AdminRoute from './components/admin/AdminRoute'
+import AdminOverview from './components/admin/AdminOverview'
+import AdminUsers from './components/admin/AdminUsers'
+import AdminReports from './components/admin/AdminReports'
+
+// ============================================
+// USER PAGES
+// ============================================
 
 import Landing from './pages/Landing'
 import Home from './pages/Home'
@@ -12,12 +25,18 @@ import Profile from './pages/Profile'
 import ItemDetails from './pages/ItemDetails'
 import Login from './pages/Login'
 
+// ============================================
+// SERVICES & CONTEXT
+// ============================================
+
 import { getItems, getMyReports } from './services/api'
 import { AuthProvider, useAuth } from './context/AuthContext'
 
 // ============================================
 // PROTECTED ROUTE
+// Only authenticated users can access
 // ============================================
+
 function ProtectedRoute({ children }) {
   const { isAuthenticated, authLoading } = useAuth()
 
@@ -39,6 +58,7 @@ function ProtectedRoute({ children }) {
 // ============================================
 // FORMAT BACKEND ITEM FOR FRONTEND
 // ============================================
+
 const formatItem = (item) => ({
   id: item._id,
   name: item.title,
@@ -76,8 +96,13 @@ const formatItem = (item) => ({
 // ============================================
 // APP ROUTES
 // ============================================
+
 function AppRoutes() {
-  const { token, isAuthenticated, authLoading } = useAuth()
+  const {
+    token,
+    isAuthenticated,
+    authLoading,
+  } = useAuth()
 
   const [items, setItems] = useState([])
   const [myReports, setMyReports] = useState([])
@@ -91,6 +116,7 @@ function AppRoutes() {
   // ============================================
   // FETCH ALL ITEMS
   // ============================================
+
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -98,9 +124,11 @@ function AppRoutes() {
         setError('')
 
         const backendItems = await getItems()
+
         setItems(backendItems.map(formatItem))
       } catch (err) {
         console.error('Failed to fetch items:', err)
+
         setError(err.message || 'Failed to load items')
       } finally {
         setLoading(false)
@@ -113,6 +141,7 @@ function AppRoutes() {
   // ============================================
   // FETCH MY REPORTS
   // ============================================
+
   useEffect(() => {
     if (authLoading) return
 
@@ -124,9 +153,11 @@ function AppRoutes() {
     const fetchMyReports = async () => {
       try {
         const backendReports = await getMyReports(token)
+
         setMyReports(backendReports.map(formatItem))
       } catch (err) {
         console.error('Failed to fetch your reports:', err)
+
         setMyReports([])
       }
     }
@@ -137,6 +168,7 @@ function AppRoutes() {
   // ============================================
   // ADD OR UPDATE ITEM
   // ============================================
+
   const addItem = (backendItem) => {
     const formattedItem = formatItem(backendItem)
 
@@ -172,6 +204,7 @@ function AppRoutes() {
   // ============================================
   // REMOVE DELETED ITEM
   // ============================================
+
   const removeItem = (itemId) => {
     setItems(current =>
       current.filter(item => item.id !== itemId)
@@ -189,6 +222,7 @@ function AppRoutes() {
   // ============================================
   // SHARED PROPS
   // ============================================
+
   const shared = useMemo(
     () => ({
       items,
@@ -208,10 +242,16 @@ function AppRoutes() {
     ]
   )
 
+  // ============================================
+  // ROUTES
+  // ============================================
+
   return (
     <Routes>
 
-      {/* PUBLIC PAGES */}
+      {/* ======================================
+          PUBLIC PAGES
+      ====================================== */}
 
       <Route
         path="/"
@@ -233,13 +273,55 @@ function AppRoutes() {
         element={<Navigate to="/login" replace />}
       />
 
-      {/* PROTECTED APPLICATION */}
+      {/* ======================================
+          SUPER ADMIN
+      ====================================== */}
+
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <AdminLayout title="Overview" description="A live snapshot of activity across TraceBack.">
+              <AdminOverview />
+            </AdminLayout>
+          </AdminRoute>
+        }
+      />
+
+      <Route
+        path="/admin/users"
+        element={
+          <AdminRoute>
+            <AdminLayout title="User Management" description="Review accounts and manage platform access.">
+              <AdminUsers />
+            </AdminLayout>
+          </AdminRoute>
+        }
+      />
+
+      <Route
+        path="/admin/reports"
+        element={
+          <AdminRoute>
+            <AdminLayout title="Report Management" description="Review and moderate lost and found reports.">
+              <AdminReports />
+            </AdminLayout>
+          </AdminRoute>
+        }
+      />
+
+      {/* ======================================
+          PROTECTED USER APPLICATION
+      ====================================== */}
 
       <Route
         path="/home"
         element={
           <ProtectedRoute>
-            <MainLayout search={search} setSearch={setSearch}>
+            <MainLayout
+              search={search}
+              setSearch={setSearch}
+            >
               <Home {...shared} />
             </MainLayout>
           </ProtectedRoute>
@@ -250,7 +332,10 @@ function AppRoutes() {
         path="/report"
         element={
           <ProtectedRoute>
-            <MainLayout search={search} setSearch={setSearch}>
+            <MainLayout
+              search={search}
+              setSearch={setSearch}
+            >
               <ReportItem
                 addItem={addItem}
                 token={token}
@@ -264,7 +349,10 @@ function AppRoutes() {
         path="/explore"
         element={
           <ProtectedRoute>
-            <MainLayout search={search} setSearch={setSearch}>
+            <MainLayout
+              search={search}
+              setSearch={setSearch}
+            >
               <FindItems {...shared} />
             </MainLayout>
           </ProtectedRoute>
@@ -275,7 +363,10 @@ function AppRoutes() {
         path="/item/:id"
         element={
           <ProtectedRoute>
-            <MainLayout search={search} setSearch={setSearch}>
+            <MainLayout
+              search={search}
+              setSearch={setSearch}
+            >
               <ItemDetails items={items} />
             </MainLayout>
           </ProtectedRoute>
@@ -286,7 +377,10 @@ function AppRoutes() {
         path="/reports"
         element={
           <ProtectedRoute>
-            <MainLayout search={search} setSearch={setSearch}>
+            <MainLayout
+              search={search}
+              setSearch={setSearch}
+            >
               <YourReports
                 items={myReports}
                 token={token}
@@ -301,7 +395,10 @@ function AppRoutes() {
         path="/profile"
         element={
           <ProtectedRoute>
-            <MainLayout search={search} setSearch={setSearch}>
+            <MainLayout
+              search={search}
+              setSearch={setSearch}
+            >
               <Profile />
             </MainLayout>
           </ProtectedRoute>
@@ -313,7 +410,10 @@ function AppRoutes() {
         element={<Navigate to="/explore" replace />}
       />
 
-      {/* UNKNOWN ROUTES */}
+      {/* ======================================
+          UNKNOWN ROUTES
+      ====================================== */}
+
       <Route
         path="*"
         element={<Navigate to="/" replace />}
@@ -326,6 +426,7 @@ function AppRoutes() {
 // ============================================
 // ROOT APP
 // ============================================
+
 export default function App() {
   return (
     <AuthProvider>

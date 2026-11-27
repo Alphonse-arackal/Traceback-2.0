@@ -3,9 +3,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import connectDB from "./config/db.js";
+
 import itemRoutes from "./routes/itemRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -21,6 +23,7 @@ app.use(express.json());
 app.use("/api/items", itemRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users/profile", profileRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Root route
 app.get("/", (req, res) => {

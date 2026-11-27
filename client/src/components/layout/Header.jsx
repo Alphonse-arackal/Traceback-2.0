@@ -1,15 +1,30 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { MapPin, Search, LogOut } from 'lucide-react'
+import {
+  MapPin,
+  Search,
+  LogOut,
+  ShieldCheck,
+} from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 export default function Header({ search, setSearch }) {
-  const { logout } = useAuth()
+  const { logout, user, isAuthenticated } = useAuth()
   const navigate = useNavigate()
+
+  const isSuperAdmin =
+    isAuthenticated && user?.role === 'admin'
 
   const handleLogout = () => {
     logout()
     navigate('/', { replace: true })
   }
+
+  const initials = user?.name
+    ?.trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map(part => part.charAt(0).toUpperCase())
+    .join('') || 'U'
 
   return (
     <header className="topbar">
@@ -41,19 +56,44 @@ export default function Header({ search, setSearch }) {
       {/* USER ACTIONS */}
       <div className="header-actions">
 
+        {/* SUPER ADMIN DASHBOARD BUTTON */}
+        {isSuperAdmin && (
+          <Link
+            to="/admin"
+            className="admin-dashboard-button"
+            title="Open Admin Dashboard"
+          >
+            <ShieldCheck size={17} />
+            <span>Admin Dashboard</span>
+          </Link>
+        )}
+
+        {/* PROFILE */}
         <Link
           className="user-chip"
           to="/profile"
           aria-label="Open profile"
         >
-          <span className="user-avatar">A</span>
+          {user?.profilePicture ? (
+            <img
+              className="user-avatar"
+              src={user.profilePicture}
+              alt=""
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <span className="user-avatar">
+              {initials}
+            </span>
+          )}
 
           <span className="user-details">
-            <b>My Profile</b>
+            <b>{user?.name || 'My Profile'}</b>
             <small>Account</small>
           </span>
         </Link>
 
+        {/* LOGOUT */}
         <button
           type="button"
           className="logout-button"
